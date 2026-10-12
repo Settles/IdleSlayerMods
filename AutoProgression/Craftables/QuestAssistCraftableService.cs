@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using AutoProgression.Diagnostics;
 using AutoProgression.Materials;
+using AutoProgression.Quests;
 using Il2Cpp;
 using UnityEngine;
 
@@ -261,7 +262,7 @@ internal sealed class QuestAssistCraftableService
     private List<Quest> SnapshotNormalQuests()
     {
         questsList ??= QuestsList.instance ?? FindLoadedQuestList();
-        var source = questsList?.lastScrollListData;
+        List<Quest> source = QuestListSnapshot.Read(questsList);
         List<Quest> result = new();
         if (source == null) return result;
 
@@ -309,7 +310,7 @@ internal sealed class QuestAssistCraftableService
         HashSet<int> seen = new();
 
         QuestsList list = QuestsList.instance ?? FindLoadedQuestList();
-        var visible = list?.lastScrollListData;
+        List<Quest> visible = QuestListSnapshot.Read(list);
         if (visible == null)
             return "current quest data is not available yet";
 

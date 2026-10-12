@@ -54,7 +54,7 @@ internal sealed class QuestElementService
                 : FindLoadedQuestList();
         resolvedQuestList = list;
 
-        var cached = list?.lastScrollListData;
+        var cached = QuestListSnapshot.Read(list);
         if (cached == null) return false;
         for (int index = 0; index < cached.Count; index++)
             AddActiveElementQuest(cached[index], quests, seen);

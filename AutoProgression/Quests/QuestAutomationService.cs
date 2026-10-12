@@ -100,20 +100,14 @@ internal sealed class QuestAutomationService
             }
         }
 
-        var quests = questsList.lastScrollListData;
-        if (quests == null)
+        List<Quest> snapshot = QuestListSnapshot.Read(questsList);
+        if (snapshot == null)
         {
             LogMissing();
             return;
         }
 
         missingLogged = false;
-        List<Quest> snapshot = new(quests.Count);
-        for (int index = 0; index < quests.Count; index++)
-        {
-            Quest quest = quests[index];
-            if (quest != null) snapshot.Add(quest);
-        }
 
         if (Plugin.Config.AutoClaimCompletedQuests.Value)
         {
@@ -159,7 +153,7 @@ internal sealed class QuestAutomationService
         }
 
         // Daily and Weekly candidates come from their authoritative live
-        // ScriptableObjects instead of QuestsList.lastScrollListData.
+        // ScriptableObjects instead of the quest-panel snapshot.
         foreach (DailyQuest daily in Resources.FindObjectsOfTypeAll<DailyQuest>())
         {
             if (daily == null || !daily.active || daily.isClaimed)
